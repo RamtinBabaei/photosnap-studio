@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Photosnap browser review</title>
+    <style>
+      body {
+        margin: 20px;
+        background: #e7e7e7;
+        color: #111;
+        font: 14px system-ui;
+      }
+      nav {
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      iframe {
+        border: 0;
+        display: block;
+        margin: auto;
+        background: white;
+        max-width: none;
+      }
+      pre {
+        white-space: pre-wrap;
+        max-height: 300px;
+        overflow: auto;
+      }
+      button,
+      select {
+        font: inherit;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav aria-label="Review controls">
+      <label
+        >Viewport
+        <select id="width">
+          <option>375</option>
+          <option>320</option>
+          <option>768</option>
+          <option>1024</option>
+          <option>1440</option>
+        </select></label
+      ><label
+        >Page
+        <select id="page">
+          <option value="/">Home</option>
+          <option value="/stories">Stories</option>
+          <option value="/features">Features</option>
+          <option value="/pricing">Pricing</option>
+          <option value="/invite">Invite</option>
+        </select></label
+      ><button id="audit">Audit accessibility</button
+      ><button id="suite">Run responsive suite</button>
+    </nav>
+    <pre id="result" aria-live="polite"></pre>
+    <iframe
+      title="Responsive Photosnap preview"
+      id="viewport"
+      width="375"
+      height="900"
+      src="/"
+    ></iframe>
+    <script>
+      const frame = document.getElementById('viewport');
+      const result = document.getElementById('result');
+      document.getElementById('width').onchange = (event) => {
+        frame.width = event.target.value;
+        result.textContent = '';
+      };
+      document.getElementById('page').onchange = (event) => {
+        frame.src = event.target.value;
+        result.textContent = '';
+      };
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      async function ready() {
+        for (let i = 0; i < 80; i++) {
+          if (frame.contentDocument.querySelector('h1')) break;
+          await delay(100);
+        }
+        await frame.contentDocument.fonts.ready;
+      }
+      async function audit() {
+        await ready();
+        if (!frame.contentWindow.axe)
+          await new Promise((resolve, reject) => {
+            const script = frame.contentDocument.createElement('script');
+            script.src = '/__axe.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            frame.contentDocument.head.append(script);
+          });
+        const auditResult = await frame.contentWindow.axe.run();
+        return {
+          passes: auditResult.passes.length,
+          violations: auditResult.violations.map((violation) => ({
+            id: violation.id,
+            impact: violation.impact,
+            nodes: violation.nodes.map((node) => ({
+              target: node.target,
+              summary: node.failureSummary,
+            })),
+          })),
+        };
+      }
+      document.getElementById('audit').onclick = async () => {
+        result.textContent = 'Running accessibility audit…';
+        try {
+          result.textContent = JSON.stringify(await audit(), null, 2);
+        } catch (error) {
+          result.textContent = String(error);
+        }
+      };
+      document.getElementById('suite').onclick = async () => {
+        const results = [];
+        for (const width of [320, 375, 768, 1024, 1440]) {
+          frame.width = width;
+          for (const page of ['/', '/stories', '/features', '/pricing', '/invite']) {
+            result.textContent = `Reviewing ${page} at ${width}px…`;
+            await new Promise((resolve) => {
+              frame.onload = resolve;
+              frame.src = page;
+            });
+            await ready();
+            const doc = frame.contentDocument;
+            const overflow = doc.documentElement.scrollWidth > doc.documentElement.clientWidth;
+            const missingImages = [...doc.images]
+              .filter((image) => image.complete && image.naturalWidth === 0)
+              .map((image) => image.getAttribute('src'));
+            const assessment = await audit();
+            results.push({ width, page, overflow, missingImages, ...assessment });
+          }
+        }
+        result.textContent = JSON.stringify(
+          {
+            total: results.length,
+            failed: results.filter(
+              (entry) => entry.overflow || entry.missingImages.length || entry.violations.length,
+            ).length,
+            results,
+          },
+          null,
+          2,
+        );
+      };
+    </script>
+  </body>
+</html>

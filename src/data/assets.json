@@ -1,0 +1,117 @@
+{
+  "cityscapes": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "bg-beta": {
+    "width": 1440,
+    "height": 280,
+    "smallWidth": 400
+  },
+  "king-on-africa": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "land-of-dreams": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "milky-way": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "somwarpet": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "trip-to-nowhere": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "pricing-hero": {
+    "width": 830,
+    "height": 490,
+    "smallWidth": 400
+  },
+  "behind-the-waves": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "mountains": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "running-free": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "architecturals": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "unforeseen-corners": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "moon-of-appalacia": {
+    "width": 1440,
+    "height": 650,
+    "smallWidth": 400
+  },
+  "world-tour": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "rage-of-the-sea": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "designed-for-everyone": {
+    "width": 830,
+    "height": 600,
+    "smallWidth": 400
+  },
+  "create-and-share": {
+    "width": 830,
+    "height": 650,
+    "smallWidth": 400
+  },
+  "calm-waters": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "dark-forest": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "18-days-voyage": {
+    "width": 360,
+    "height": 500,
+    "smallWidth": 360
+  },
+  "beautiful-stories": {
+    "width": 830,
+    "height": 600,
+    "smallWidth": 400
+  },
+  "features-hero": {
+    "width": 830,
+    "height": 490,
+    "smallWidth": 400
+  }
+}

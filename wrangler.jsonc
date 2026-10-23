@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "photosnap-studio",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-23",
+  "workers_dev": true,
+  "minify": true,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"],
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "photosnap-production",
+      "database_id": "4b8b0b32-1c82-4ba7-9f84-77636d0f451f",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "triggers": { "crons": ["17 3 * * *"] },
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 },
+}

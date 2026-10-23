@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.worker-build/
+.prerender/
+.wrangler/
+.env
+.env.*
+!.env.example
+.dev.vars
+coverage/
+*.log
+.DS_Store
+.openai/
+public/__qa.html
+public/__axe.js
